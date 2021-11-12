@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+  name: follis-ingress
+  namespace: production
+spec:
+  tls:
+  - hosts:
+    - follis.api.app
+    secretName: follis-tlscert
+  rules:
+    - host: follis.api.app
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: recoveryplan-api-svc
+                port:
+                  number: 8081
